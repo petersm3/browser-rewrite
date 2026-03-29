@@ -12,7 +12,7 @@ $this->setLayoutVar('pageTitle', 'About');
           <li>Emulating the functionality of <a target="_blank" href="https://oregondigital.org/collections/building-or">Building Oregon</a> (circa 2015)</li>
       </ul>
   </li>
-  <li>GitHub: <a target="_blank" href="https://github.com/petersm3/browser">https://github.com/petersm3/browser-rewrite</a></li>
+  <li>GitHub: <a target="_blank" href="https://github.com/petersm3/browser-rewrite">https://github.com/petersm3/browser-rewrite</a></li>
   <li>Technologies used:
       <ul>
          <li><a target="_blank" href="http://php.net/">PHP</a></li>
