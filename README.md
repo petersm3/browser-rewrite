@@ -5,7 +5,7 @@ A faceted search and navigation web application for browsing cultural heritage i
 Claude Code rewrite based upon original https://github.com/petersm3/browser
 
 ## Documentation
-Original [Lightning Talk](docs/browser-lightning-talk-20151118.pdf) (2015-11-18)
+Original [Lightning Talk](docs/browser-lightning-talk-20151118.pdf) (20151118)
 
 ## Screenshot
 ![Lightning Talk Slide 09 showing browser faceted navigation interface](docs/browser-slide09.png)
