@@ -1,6 +1,8 @@
-# Browser
+# Summary
 
 A faceted search and navigation web application for browsing cultural heritage image collections. Users select category filters from dropdown menus to narrow results across ~20,000 accession records, view paginated results, and drill into individual accession detail pages.
+
+Claude Code rewrite based upon original https://github.com/petersm3/browser
 
 ## Documentation
 Original [Lightning Talk](docs/browser-lightning-talk-20151118.pdf) (2015-11-18)
