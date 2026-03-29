@@ -8,10 +8,6 @@ class NavigationDatabase {
         $this->dbh = $dbh;
     }
 
-    protected function beforeAction() {
-        parent::beforeAction(); // chain to parent
-    }
-
     // Obtain all categories sorted by priority
     public function getCategories() {
         try {

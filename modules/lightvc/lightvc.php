@@ -1180,7 +1180,7 @@ class Lvc_PageController {
 			if (Lvc_Config::getSendActionParamsAsArray()) {
 				$this->$func($actionParams);
 			} else {
-				call_user_func_array(array($this, $func), $actionParams);
+				call_user_func_array(array($this, $func), array_values($actionParams));
 			}
 			
 			// Load the view

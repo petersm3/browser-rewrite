@@ -8,10 +8,6 @@ class DisplayDatabase {
         $this->dbh = $dbh;
     }
 
-    protected function beforeAction() {
-        parent::beforeAction(); // chain to parent
-    }
-
     // Lookup function to get primary key for each individual filter specified
     public function getCategoriesId($category, $subcategory) {
         try {
