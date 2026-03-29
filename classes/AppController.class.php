@@ -34,8 +34,9 @@ class AppController extends Lvc_PageController
 	public function sendHttpStatusHeader($code)
 	{
 		include_once('HttpStatusCode.class.php');
+		$code = preg_replace('/[^0-9]/', '', $code);
 		$statusCode = new HttpStatusCode($code);
-		header('HTTP 1.1 ' . $statusCode->getCode() . ' ' . $statusCode->getDefinition());
+		header('HTTP/1.1 ' . $statusCode->getCode() . ' ' . str_replace(array("\r", "\n"), '', $statusCode->getDefinition()));
 		return $statusCode;
 	}
 	

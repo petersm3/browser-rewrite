@@ -6,11 +6,11 @@ class Filter {
         $getFilters='';
         if(isset($post['filters'])) {
             foreach ($post['filters'] as $key => $value) {
-                $getFilters.='filter[]=' . $value . '&';
+                $getFilters.='filter[]=' . urlencode($value) . '&';
             }
         }
         if(isset($post['offset'])) {
-            $getFilters.='offset=' . $post['offset'] . '&';
+            $getFilters.='offset=' . intval($post['offset']) . '&';
         }
         // Do not need trailing &
         return substr($getFilters, 0, -1);

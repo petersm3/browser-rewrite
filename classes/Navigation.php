@@ -140,7 +140,7 @@ EOD;
                         $menus.='<div class="alert alert-danger" role="alert">';
                         $menus.='<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>';
                         $menus.='<span class="sr-only">Error:</span>';
-                        $menus.=' Filter: "' . $getFilter . '" is not valid; please check your URL.';
+                        $menus.=' Filter: "' . htmlspecialchars($getFilter, ENT_QUOTES, 'UTF-8') . '" is not valid; please check your URL.';
                         $menus.='</div>';
                     }
                 }
@@ -150,7 +150,7 @@ EOD;
                 $menus.='<ol class="breadcrumb">';
                 if(isset($get['filter'])) {
                     foreach ($get['filter'] as $filter) {
-                        $menus.='<li>' . str_replace('_', ' ', $filter) . '</li> ';
+                        $menus.='<li>' . htmlspecialchars(str_replace('_', ' ', $filter), ENT_QUOTES, 'UTF-8') . '</li> ';
                     }
                 } else {
                     $menus.= '<li>Filters: <i>none</i></li>';
