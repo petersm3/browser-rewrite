@@ -6,7 +6,7 @@ Claude Code rewrite based upon original https://github.com/petersm3/browser
 
 ## Live Demo
 * https://petersm3.github.io/browser-rewrite
-  * LAMP version rewritten into a standalone static site version using sql.js (SQLite in WebAssembly)
+  * Pure client-side rewrite of the PHP/MySQL application. The browser loads a pre-built SQLite database via WebAssembly and runs all queries locally. ff61fae
 
 ## Documentation
 Original [Lightning Talk](assets/browser-lightning-talk-20151118.pdf) (20151118)
