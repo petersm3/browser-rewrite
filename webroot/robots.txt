@@ -1,0 +1,6 @@
+# Block crawlers from filter URLs to prevent excessive crawling
+User-agent: *
+Disallow: /filter
+Allow: /
+Allow: /about
+Allow: /display

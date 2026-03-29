@@ -10,7 +10,10 @@ class Display {
         $this->displayDatabase = new DisplayDatabase($dbh);
 
         $offset=0;
-        $limit=100; // Hard coded limit; TODO: make user specified as a future feature
+        $limit=100; // Default results per page
+        if(isset($get['limit']) && intval($get['limit']) > 0 && intval($get['limit']) <= 500) {
+            $limit = intval($get['limit']);
+        }
 
         $results='';
         if(isset($get['filter'])) {
@@ -48,7 +51,7 @@ class Display {
                     $results.='<div class="row">';
                     $results.='<div class="col-sm-5">';
                     $results.='<a href="/display?id=' . $filterMatch['fk_properties_id'] . '">';
-                    $results.='<img class="img-responsive" src="http://' . CDN_URL;
+                    $results.='<img class="img-responsive" src="https://' . CDN_URL;
                     $results.='/320x240/000/fff.png&amp;text=%20';
                     $results.=htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8');
                     $results.='" alt="' . htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8') . '"/></a>';
@@ -68,10 +71,14 @@ class Display {
                 }
             }
 
-            // Pagniation
-            $filterMatchCount=count($this->displayDatabase->getFilterMatches($categoryIds));
+            // Pagination
+            $filterMatchCount=$this->displayDatabase->getFilterMatchCount($categoryIds);
             $totalPages=ceil($filterMatchCount/$limit);
+            // Result count display
+            $startResult = $offset + 1;
+            $endResult = min($offset + $limit, $filterMatchCount);
             $results.='<div class="text-center">';
+            $results.='<p>Showing ' . $startResult . '-' . $endResult . ' of ' . $filterMatchCount . ' results</p>';
             $results.='<ul class="pagination">';
             // Construct URL of current page
             $urlFilter='';
@@ -115,7 +122,7 @@ class Display {
 
         $results='';
         $results.='<div class="jumbotron">';
-        $results.='<img class="img-responsive" src="http://' . CDN_URL .'/640x480/000/fff.png&amp;text=%20';
+        $results.='<img class="img-responsive" src="https://' . CDN_URL .'/640x480/000/fff.png&amp;text=%20';
         $results.=htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8');
         $results.='" alt="' . htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8') . '"/>';
         $results.='<table class="table">';
@@ -124,8 +131,6 @@ class Display {
         $results.='<tr><td>Address:</td><td>' . htmlspecialchars($properties['street_address'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
         $results.='<tr><td>Photographer:</td><td>' . htmlspecialchars($properties['photographer'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
         $results.='<tr><td>Date:</td><td>' . htmlspecialchars($properties['date'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
-        // Not sorting attributes in any consistent way
-        // TODO: Add some sort of sorting method
         foreach ($attributes as $attribute) {
             $results.='<tr><td>' . htmlspecialchars($attribute['name'], ENT_QUOTES, 'UTF-8') . '</td><td>' . htmlspecialchars($attribute['value'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
         }

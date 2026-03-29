@@ -25,7 +25,7 @@ class NavigationDatabase {
     // Obtain all filters (sub-categories) per single category; unsorted
     public function getSubCategories($category) {
         try {
-            $sql = "SELECT subcategory FROM categories WHERE category = ?";
+            $sql = "SELECT subcategory FROM categories WHERE category = ? ORDER BY subcategory";
             $st = $this->dbh->prepare($sql);
             $values = array($category);
             $st->execute($values);

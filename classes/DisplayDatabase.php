@@ -53,6 +53,29 @@ class DisplayDatabase {
         }
     }
 
+    // Obtain the count of fk_properties_ids that match the filter criteria exactly
+    // Used for pagination instead of fetching all rows
+    public function getFilterMatchCount($categoriesIds) {
+        try {
+            $qMarks = ' ? ';
+            if(count($categoriesIds) > 1) {
+                $qMarks = str_repeat('?,', count($categoriesIds) - 1) . '?';
+            }
+            $sql="SELECT COUNT(*) as total FROM (";
+            $sql.="SELECT fk_properties_id FROM filters WHERE fk_categories_id ";
+            $sql.="IN ($qMarks) GROUP BY fk_properties_id HAVING COUNT(fk_properties_id) = ";
+            $sql.=count($categoriesIds);
+            $sql.=") as matched";
+            $st = $this->dbh->prepare($sql);
+            $st->execute($categoriesIds);
+            $result = $st->fetch();
+            return $result ? intval($result['total']) : 0;
+        } catch (PDOException $e) {
+            error_log("DisplayDatabase::getFilterMatchCount() failed: " . $e->getMessage());
+            return 0;
+        }
+    }
+
     // Obtain all of the properties for a single accession
     // This information is used by each accession on both the main page listing
     // and by the single accession display page
@@ -77,7 +100,7 @@ class DisplayDatabase {
     public function getAttributes($propertiesId) {
         try {
             $sql="SELECT name, value ";
-            $sql.=" FROM attributes where fk_properties_id = ?";
+            $sql.=" FROM attributes where fk_properties_id = ? ORDER BY name";
             $st = $this->dbh->prepare($sql);
             $values = array(intval($propertiesId));
             $st->execute($values);

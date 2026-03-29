@@ -31,9 +31,12 @@ $menus.= <<<'EOD'
 EOD;
 
 // If on the Display page provide a back button
-// TODO: Construct a URL useable by screen readers for WCAG compliance as they may not implement browser JS
 if ($about === 2) {
-    $menus.='<a class="navbar-brand" href="javascript:history.back()">';
+    $backUrl = '/';
+    if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) !== false) {
+        $backUrl = htmlspecialchars($_SERVER['HTTP_REFERER'], ENT_QUOTES, 'UTF-8');
+    }
+    $menus.='<a class="navbar-brand" href="' . $backUrl . '">';
     $menus.='Back <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>';
 }
 
@@ -155,6 +158,7 @@ EOD;
                     foreach ($get['filter'] as $filter) {
                         $menus.='<li>' . htmlspecialchars(str_replace('_', ' ', $filter), ENT_QUOTES, 'UTF-8') . '</li> ';
                     }
+                    $menus.='<li><a href="/">Clear all filters</a></li>';
                 } else {
                     $menus.= '<li>Filters: <i>none</i></li>';
                 }

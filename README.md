@@ -1,13 +1,52 @@
-# Summary
-Image and cultural properties browser
+# Browser
 
-# Documentation 
+A faceted search and navigation web application for browsing cultural heritage image collections. Users select category filters from dropdown menus to narrow results across ~20,000 accession records, view paginated results, and drill into individual accession detail pages.
+
+## Documentation
 [Lightning Talk](docs/browser-lightning-talk-20151118.pdf)
 
-# Screenshot
+## Screenshot
 ![Lightning Talk Slide 09 showing browser faceted navigation interface](docs/browser-slide09.png)
 
-# Schema
+## Features
+- **Faceted navigation** with dropdown category filters and checkbox selection
+- **Projected result counts** shown as badges next to each unselected filter
+- **Pagination** with configurable results per page (`?limit=N`, max 500)
+- **Result count display** ("Showing X-Y of Z results")
+- **Breadcrumb bar** showing active filters with a "Clear all filters" link
+- **Single accession detail pages** with full metadata and attributes
+- **WCAG accessibility** with a submit button fallback for screen readers
+
+---
+
+# Technical Details
+
+## Architecture
+PHP 5+/8.x application using the [LightVC](modules/lightvc/) MVC framework, Bootstrap 3.x, and jQuery 1.11.3.
+
+```
+browser-rewrite/
+├── classes/          # Database access, navigation, display, filter logic
+├── config/           # Application config, routes, DB credentials
+├── controllers/      # Page, Filter, Display, About, Error controllers
+├── modules/          # LightVC framework (bundled)
+├── tools/            # Database population script
+├── views/            # PHP templates and default layout
+└── webroot/          # Document root (index.php, css/, js/, images/)
+```
+
+### Request flow
+```
+GET /?filter[]=Category%3ASubcategory&offset=100
+  → Apache mod_rewrite → webroot/index.php
+    → Lvc_FrontController → Lvc_RegexRewriteRouter
+      → PageController::actionView()
+        → Navigation: builds dropdown menus + breadcrumbs
+        → Display: queries filtered results with pagination
+        → View: renders Bootstrap HTML
+```
+
+## Database Schema
 ```mermaid
 erDiagram
     categories {
@@ -39,95 +78,78 @@ erDiagram
     properties ||--|{ filters : ""
     properties ||--|{ attributes : ""
 ```
-* `categories` table to help build navigation dropdown of categories and sub-categories
-* `filters` table maps categories and sub-categories to each accession (image)
-* `properties` table defines each of the 20,000 [randomly generated](tools/populate_database.php) accessions (images)
-  * **Note:** `date` is not defined using the MySQL `date` type as the reference for this project contained arbitrary dates, e.g., "Temporal 1900-1909"
-* `attributes` table stores additional, arbitrary metadata for each accession
 
-# Setup
-## MySQL
-* View comments at bottom of: [Database.php](classes/Database.php)
-* Modify `my.cnf` to enforce `sql_mode="STRICT_ALL_TABLES"` for primary/foriegn key InnoDB constraints.
-* CREATE DATABASE
-  * `browser`
-* CREATE USER and GRANTS
-  * `browser_www`
-* CREATE TABLES
-  * `categories`
-  * `properties`
-  * `filters`
-  * `attributes`
-* CREATE INDEX
-  * `categories`
-  * `filters`
-  * `attributes`
+- **categories** -- navigation dropdown entries, ordered by `priority`
+- **filters** -- junction table mapping categories to accessions (properties)
+- **properties** -- the 20,000 [randomly generated](tools/populate_database.php) accession records
+  - `date` is `varchar` rather than MySQL `date` because source data contains arbitrary date strings (e.g., "Temporal 1900-1909")
+- **attributes** -- arbitrary key/value metadata per accession, sorted alphabetically by name
 
-### Populate database
-* Copy [credentials.php-template](tools/credentials.php-template) to `credentials.php`
-  * Configure values; database user must have a GRANT to perform INSERT.
-* Run [populate_database.php](tools/populate_database.php)
-  * e.g., `20000` accessions
-  * Only run this script once. If you need to re-run then first drop the tables and recreate.
-    * This is necessary as the script assumes a certain order/offset from the auto increment primary keys.
+## Setup
 
-## Apache
-Example is from Ubuntu `/etc/apache2/sites-enabled/` configuration files
+### 1. MySQL
 
-### VHOST
+Refer to comments in [Database.php](classes/Database.php) for the full schema DDL.
 
-#### Browser
-* Per LightVC (https://github.com/awbush/lightvc) setup you must specify both the `DocumentRoot` and `Directory` as `webroot`
-  * Do not specify these variables as the top-level directory, e.g., `/data/www/browser`
-* Define `<MY FQDN>`
+1. Enforce strict mode in `my.cnf`:
+   ```ini
+   sql_mode="STRICT_ALL_TABLES"
+   ```
+2. Create the database, users, tables, and indexes:
+   - Database: `browser`
+   - Users: `browser_www` (SELECT only for the app), plus a user with INSERT for populating data
+   - Tables: `categories`, `properties`, `filters`, `attributes`
+   - Indexes on `categories`, `filters`, `attributes`
+
+### 2. Populate database
+
+1. Copy [credentials.php-template](tools/credentials.php-template) to `tools/credentials.php` and configure values (user must have INSERT privileges)
+2. Run [populate_database.php](tools/populate_database.php) to generate ~20,000 accessions
+   - Run this script only once. To re-run, drop and recreate all tables first, as the script depends on auto-increment primary key ordering.
+
+### 3. Apache
+
+Configure a VirtualHost with `DocumentRoot` and `Directory` pointing to `webroot/` (not the top-level project directory), as required by LightVC:
+
 ```apache
-<VirtualHost *:80>
+<VirtualHost *:443>
+    ServerName browser.example.com
+    DocumentRoot /var/www/browser-rewrite/webroot
 
-    ServerAdmin petersm3@onid.oregonstate.edu
-    DocumentRoot /data/www/browser/webroot
-    ServerName browser.<MY FQDN>
+    <Directory /var/www/browser-rewrite/webroot>
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/letsencrypt/live/browser.example.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/browser.example.com/privkey.pem
 
-<Directory /data/www/browser/webroot>
-  AllowOverride All
-  Require all granted
-</Directory>
+    ErrorLog  ${APACHE_LOG_DIR}/browser-error.log
+    CustomLog ${APACHE_LOG_DIR}/browser-access.log combined
 </VirtualHost>
 ```
 
-#### CDN
-* Simulated content delivery network (see Application documentation below)
-* Define `<MY FQDN>`
-```apache
-<VirtualHost *:80>
+#### CDN (optional)
 
-    ServerAdmin webmaster@localhost
-    DocumentRoot /data/www/cdn
-    ServerName cdn.<MY FQDN>
+The application references a CDN for placeholder images. To simulate this locally, deploy [Dynamic Dummy Image Generator](http://dummyimage.com/) to a separate VirtualHost:
 
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+- `code.php` is required (referenced by its `.htaccess`); `index.php` is not
+- Requires PHP GD: `apt-get install php-gd`
+- Line 110 of `code.php` may need an explicit font path, e.g.: `$font = "/var/www/cdn/mplus-1c-medium.ttf";`
 
-<Directory /data/www/cdn>
-  AllowOverride All
-  Require all granted
-</Directory>
-</VirtualHost>
+### 4. Application configuration
+
+1. Copy [config.php-template](config/config.php-template) to `config/config.php`
+2. Set the MySQL credentials (`browser_www` with SELECT-only privileges)
+3. Set `CDN_URL` to the CDN VirtualHost FQDN
+
+### 5. Rate limiting (recommended)
+
+Install and enable `mod_evasive` for Apache to protect against abusive crawlers and simple DoS:
+
+```bash
+apt-get install libapache2-mod-evasive
+a2enmod evasive
+systemctl restart apache2
 ```
-
-## Application
-
-### Content delivery network (CDN)
-* Simulate CDN by deploying "Dynamic Dummy Image Generator" (http://dummyimage.com/) to VHOST.
-  * The `index.php` is not required; `code.php` is required and referenced by `.htaccess`
-  * GD required, e.g., on Ubuntu: `apt-get install php5-gd`
-* Line 110 of code.php may need to have the explicit path to the font (on Ubuntu):
-  * `$font = "/data/www/cdn/mplus-1c-medium.ttf";`
-
-### Application configuration
-* Copy [config.php-template](config/config.php-template) to `config.php`
-  * Configure values
-  * User should be `browser_www` with only a GRANT to SELECT.
-  * `CDN_URL` is the VHOST defined for th content delivery network (above).
