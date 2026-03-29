@@ -523,7 +523,7 @@
         html += '         <li><a target="_blank" href="https://sql.js.org/">sql.js</a> (SQLite in WebAssembly)</li>';
         html += '         <li><a target="_blank" href="https://getbootstrap.com/">Bootstrap</a></li>';
         html += '         <li><a target="_blank" href="http://dummyimage.com/">Dynamic Dummy Image Generator</a></li>';
-        html += '         <li><a target="_blank" href="https://claude.ai/claude-code">Claude Code</a></li>';
+        html += '         <li><a target="_blank" href="https://claude.ai">Claude Code</a></li>';
         html += '      </ul>';
         html += '   </li>';
         html += '</ul>';
