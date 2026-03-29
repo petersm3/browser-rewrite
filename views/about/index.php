@@ -9,7 +9,7 @@ $this->setLayoutVar('pageTitle', 'About');
   <li>Author: Matthew Peterson <a href="mailto:petersm3@oregonstate.edu">petersm3@oregonstate.edu</a></li>
   <li>Project: Image and cultural properties browser
       <ul>
-          <li>Emulating the fucntionality of <a target="_blank" href="https://oregondigital.org/collections/building-or">Building Oregon</a> (circa 2015)</li>
+          <li>Emulating the functionality of <a target="_blank" href="https://oregondigital.org/collections/building-or">Building Oregon</a> (circa 2015)</li>
       </ul>
   </li>
   <li>GitHub: <a target="_blank" href="https://github.com/petersm3/browser">https://github.com/petersm3/browser-rewrite</a></li>
