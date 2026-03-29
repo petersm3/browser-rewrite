@@ -2,6 +2,7 @@
 // Navigation helper functions to construct top-level dropdown faceted navigation
 
 class NavigationDatabase {
+    protected $dbh;
 
     function __construct($dbh) {
         $this->dbh = $dbh;

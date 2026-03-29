@@ -2,6 +2,7 @@
 // Display functions for both the front page (set of items) and individual display pages (single accession)
 
 class DisplayDatabase {
+    protected $dbh;
 
     function __construct($dbh) {
         $this->dbh = $dbh;

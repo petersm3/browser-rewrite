@@ -3,6 +3,7 @@ require_once(APP_PATH . 'classes/DisplayDatabase.php');
 // Display functions for both the main page when navigating and for the single accesion display page
 
 class Display {
+    protected $displayDatabase;
 
     // Obtain all results given the currently checked filter(s)
     public function getResults($get, $dbh) {
@@ -35,7 +36,7 @@ class Display {
 
             // Get all accessions that match filter criteria
             $filterMatches = $this->displayDatabase->getFilterMatches($categoryIds, $limit, $offset);
-            if(count($filterMatches) == 0) {
+            if(count($filterMatches) === 0) {
                 $results.='<div class="jumbotron">';
                 $results.='No matches found satisfying an exact match to the above filter critera.';
                 $results.='</div>'; 
@@ -107,7 +108,7 @@ class Display {
     public function getAccession($id, $dbh) {
         $this->displayDatabase = new DisplayDatabase($dbh);
         $properties = $this->displayDatabase->getProperties(intval($id));
-        if ($properties['id'] != intval($id)) {
+        if (intval($properties['id']) !== intval($id)) {
             return "Accession " . intval($id) . ' not found.';
         }
         $attributes = $this->displayDatabase->getAttributes(intval($id));

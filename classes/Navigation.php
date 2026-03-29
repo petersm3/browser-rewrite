@@ -5,6 +5,9 @@ require_once(APP_PATH . 'classes/DisplayDatabase.php');
 // Create Faceted Navigation header
 // Intercepts previously checked items and repopulates check boxes
 class Navigation {
+    protected $navigationDatabase;
+    protected $displayDatabase;
+
     public function getMenus($get, $dbh = null, $about = 0) {
 
         $this->navigationDatabase = new NavigationDatabase($dbh);
@@ -29,7 +32,7 @@ EOD;
 
 // If on the Display page provide a back button
 // TODO: Construct a URL useable by screen readers for WCAG compliance as they may not implement browser JS
-if ($about == 2) {
+if ($about === 2) {
     $menus.='<a class="navbar-brand" href="javascript:history.back()">';
     $menus.='Back <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>';
 }
@@ -135,7 +138,7 @@ EOD;
                     $category = str_replace('_', ' ', $categorySubcategory[0]);
                     $subcategory = urldecode(str_replace('_' ,' ', $categorySubcategory[1]));
                     $categoryId = $this->displayDatabase->getCategoriesId($category, $subcategory);
-                    if(($error == 0) && ($categoryId['id'] < 1)) {
+                    if(($error === 0) && ($categoryId['id'] < 1)) {
                         $error=1;
                         $menus.='<div class="alert alert-danger" role="alert">';
                         $menus.='<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>';
@@ -146,7 +149,7 @@ EOD;
                 }
             }
 
-            if($error==0) {
+            if($error === 0) {
                 $menus.='<ol class="breadcrumb">';
                 if(isset($get['filter'])) {
                     foreach ($get['filter'] as $filter) {

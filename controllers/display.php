@@ -9,6 +9,8 @@ class DisplayController extends AppController {
 
     private $database;
     private $dbh;
+    private $navigation;
+    private $display;
 
     protected function beforeAction() {
         // parent::beforeAction(); // chain to parent

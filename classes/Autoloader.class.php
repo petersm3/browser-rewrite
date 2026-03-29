@@ -133,7 +133,7 @@ class Autoloader {
 	protected static function loadCachedPaths() {
 		if (is_null(self::$cachedPaths)) {
 			if (self::$cacheFilePath && is_file(self::$cacheFilePath)) {
-				self::$cachedPaths = unserialize(file_get_contents(self::$cacheFilePath));
+				self::$cachedPaths = unserialize(file_get_contents(self::$cacheFilePath), ['allowed_classes' => false]);
 			}
 		}
 	}
@@ -157,8 +157,14 @@ class Autoloader {
 	
 	protected static function searchForClassFile($className, $directory) {
 		if (is_dir($directory) && is_readable($directory)) {
-			$d = dir($directory);
-			while ($f = $d->read()) {
+			$entries = scandir($directory);
+			if ($entries === false) {
+				return false;
+			}
+			foreach ($entries as $f) {
+				if ($f === '.' || $f === '..') {
+					continue;
+				}
 				$subPath = $directory . $f;
 				if (is_dir($subPath)) {
 					// Found a subdirectory
@@ -169,7 +175,7 @@ class Autoloader {
 					}
 				} else {
 					// Found a file
-					if ($f == $className . self::$classFileSuffix) {
+					if ($f === $className . self::$classFileSuffix) {
 						return $subPath;
 					}
 				}

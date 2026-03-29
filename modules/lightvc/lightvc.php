@@ -514,7 +514,7 @@ class Lvc_GetRouter implements Lvc_RouterInterface {
 				) {
 					$actionParams = array();
 					foreach ($this->routes[$request->getControllerName()][$request->getActionName()] as $paramName) {
-						$actionParams[$paramName] = @$params['get'][$paramName];
+						$actionParams[$paramName] = isset($params['get'][$paramName]) ? $params['get'][$paramName] : null;
 					}
 					$request->setActionParams($actionParams);
 				}
@@ -716,7 +716,7 @@ class Lvc_RegexRewriteRouter implements Lvc_RouterInterface {
 					if (isset($parsingInfo['controller'])) {
 						if (is_int($parsingInfo['controller'])) {
 							// Get the controller name from the regex matches
-							$request->setControllerName(@$matches[$parsingInfo['controller']]);
+							$request->setControllerName(isset($matches[$parsingInfo['controller']]) ? $matches[$parsingInfo['controller']] : '');
 						} else {
 							// Use the constant value
 							$request->setControllerName($parsingInfo['controller']);
@@ -725,7 +725,7 @@ class Lvc_RegexRewriteRouter implements Lvc_RouterInterface {
 					
 					if (isset($parsingInfo['sub_path'])) {
 						if (is_int($parsingInfo['sub_path'])){
-							$request->setControllerSubPath(@$matches[$parsingInfo['sub_path']]);
+							$request->setControllerSubPath(isset($matches[$parsingInfo['sub_path']]) ? $matches[$parsingInfo['sub_path']] : '');
 						} else {
 							// Use the constant value
 							$request->setControllerSubPath($parsingInfo['sub_path']);
@@ -736,7 +736,7 @@ class Lvc_RegexRewriteRouter implements Lvc_RouterInterface {
 					if (isset($parsingInfo['action'])) {
 						if (is_int($parsingInfo['action'])) {
 							// Get the action from the regex matches
-							$request->setActionName(@$matches[$parsingInfo['action']]);
+							$request->setActionName(isset($matches[$parsingInfo['action']]) ? $matches[$parsingInfo['action']] : '');
 						} else {
 							// Use the constant value
 							$request->setActionName($parsingInfo['action']);

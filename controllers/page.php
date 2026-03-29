@@ -8,6 +8,8 @@ class PageController extends AppController
 {
     private $database;
     private $dbh;
+    private $navigation;
+    private $display;
 
     protected function beforeAction() {
         // parent::beforeAction(); // chain to parent
@@ -16,7 +18,7 @@ class PageController extends AppController
     }
 
     public function actionView($pageName = 'home')
-    { 
+    {
         $this->navigation = new Navigation;
         $this->display = new Display;
         // Generate faceted navigation
