@@ -3,7 +3,7 @@
 A faceted search and navigation web application for browsing cultural heritage image collections. Users select category filters from dropdown menus to narrow results across ~20,000 accession records, view paginated results, and drill into individual accession detail pages.
 
 ## Documentation
-[Lightning Talk](docs/browser-lightning-talk-20151118.pdf)
+Original [Lightning Talk](docs/browser-lightning-talk-20151118.pdf) (2015-11-18)
 
 ## Screenshot
 ![Lightning Talk Slide 09 showing browser faceted navigation interface](docs/browser-slide09.png)
