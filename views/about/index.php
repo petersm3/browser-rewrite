@@ -21,7 +21,7 @@ $this->setLayoutVar('pageTitle', 'About');
          <li><a target="_blank" href="https://github.com/awbush/lightvc">LightVC</a></li>
          <li><a target="_blank" href="http://getbootstrap.com/">Bootstrap</a></li>         
          <li><a target="_blank" href="http://dummyimage.com/">Dynamic Dummy Image Generator</a></li>
-         <li><a target="_blank" href="https://claude.ai/claude-code">Claude Code</a></li>
+         <li><a target="_blank" href="https://claude.ai">Claude Code</a></li>
       </ul>
    </li>
 </ul>
