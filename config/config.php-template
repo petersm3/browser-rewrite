@@ -7,5 +7,6 @@ define('MYSQL_DATABASE', 'browser');
 define('MYSQL_USERNAME', 'browser_www');
 define('MYSQL_PASSWORD', '**********');
 define('CDN_URL', 'fqdn'); // Content Distribution Network URL
+define('SORT_SUBCATEGORIES', false); // Set to true for alphabetical subcategory sorting in dropdowns
 ?>
 
