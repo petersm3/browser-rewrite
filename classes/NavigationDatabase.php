@@ -12,7 +12,7 @@ class NavigationDatabase {
     public function getCategories() {
         try {
             // categories have a `priority` order assigned in the schema for nav display
-            $sql = "SELECT DISTINCT category FROM categories ORDER BY priority";
+            $sql = "SELECT category, MIN(priority) as priority FROM categories GROUP BY category ORDER BY priority";
             $st = $this->dbh->prepare($sql);
             $st->execute();
             return $st->fetchAll();
