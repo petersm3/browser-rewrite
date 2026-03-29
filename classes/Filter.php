@@ -9,6 +9,9 @@ class Filter {
                 $getFilters.='filter[]=' . $value . '&';
             }
         }
+        if(isset($post['limit']) && intval($post['limit']) > 0) {
+            $getFilters.='limit=' . intval($post['limit']) . '&';
+        }
         if(isset($post['offset'])) {
             $getFilters.='offset=' . intval($post['offset']) . '&';
         }

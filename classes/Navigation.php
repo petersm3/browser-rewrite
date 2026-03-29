@@ -113,6 +113,30 @@ $menus.='<ul class="nav navbar-nav">';
                 }
                 $menus.='</ul></li>';
             }
+            // Results per page dropdown
+            $currentLimit = 10;
+            if(isset($get['limit']) && intval($get['limit']) > 0) {
+                $currentLimit = intval($get['limit']);
+            }
+            $limitOptions = array(10, 50, 100, 250, 500);
+            $menus.='<li class="dropdown">';
+            $menus.='<a href="#" class="dropdown-toggle" data-toggle="dropdown"';
+            $menus.=' role="button" aria-haspopup="true" aria-expanded="false">';
+            $menus.='Per page: ' . $currentLimit;
+            $menus.='<span class="caret"></span></a>';
+            $menus.='<ul class="dropdown-menu">';
+            foreach($limitOptions as $opt) {
+                $menus.='<li>&nbsp;<input type="radio" name="limit" id="limit_' . $opt;
+                $menus.='" value="' . $opt . '"';
+                if($opt === $currentLimit) {
+                    $menus.=' checked';
+                }
+                $menus.=' onchange="this.form.submit();"> ';
+                $menus.='<label style="font-weight:normal !important;" for="limit_' . $opt . '">';
+                $menus.=$opt . '</label></li>';
+            }
+            $menus.='</ul></li>';
+
             $menus.='<li>';
             // Submit button for WCAG as screen reader may not implement JS onchange
             $menus.='<button type="submit" class="btn btn-link">Submit</button></li>';

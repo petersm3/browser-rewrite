@@ -11,7 +11,7 @@ Original [Lightning Talk](docs/browser-lightning-talk-20151118.pdf) (2015-11-18)
 ## Features
 - **Faceted navigation** with dropdown category filters and checkbox selection
 - **Projected result counts** shown as badges next to each unselected filter
-- **Pagination** with configurable results per page (`?limit=N`, max 500)
+- **Pagination** with user-selectable results per page (10, 50, 100, 250, 500) via navbar dropdown
 - **Result count display** ("Showing X-Y of Z results")
 - **Breadcrumb bar** showing active filters with a "Clear all filters" link
 - **Single accession detail pages** with full metadata and attributes

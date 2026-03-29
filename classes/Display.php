@@ -10,7 +10,7 @@ class Display {
         $this->displayDatabase = new DisplayDatabase($dbh);
 
         $offset=0;
-        $limit=100; // Default results per page
+        $limit=10; // Default results per page
         if(isset($get['limit']) && intval($get['limit']) > 0 && intval($get['limit']) <= 500) {
             $limit = intval($get['limit']);
         }
@@ -84,6 +84,9 @@ class Display {
             $urlFilter='';
             foreach ($get['filter'] as $getFilter) {
                 $urlFilter.='filter[]=' .  htmlspecialchars(urlencode($getFilter), ENT_QUOTES, 'UTF-8') . '&amp;';
+            }
+            if($limit !== 10) {
+                $urlFilter.='limit=' . $limit . '&amp;';
             }
             for ($page = 1; $page <= $totalPages; $page++) {
                 $currentOffset = (($page-1)*$limit);
