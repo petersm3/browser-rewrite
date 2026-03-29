@@ -52,27 +52,27 @@ GET /?filter[]=Category%3ASubcategory&offset=100
 ```mermaid
 erDiagram
     categories {
-        int(2) id PK
-        int(2) priority
+        int id PK
+        int priority
         varchar(256) category
         varchar(256) subcategory
         varchar(1024) comment
     }
     filters {
-        int(7) id PK
-        int(7) fk_properties_id FK
-        int(2) fk_categories_id FK
+        int id PK
+        int fk_properties_id FK
+        int fk_categories_id FK
     }
     properties {
-        int(7) id PK
+        int id PK
         varchar(32) image
         varchar(255) street_address
         varchar(255) photographer
-        varhcar(255) date
+        varchar(255) date
     }
     attributes {
-        int(9) id PK
-        int(7) fk_properties_id FK
+        int id PK
+        int fk_properties_id FK
         varchar(256) name
         varchar(1024) value
     }
