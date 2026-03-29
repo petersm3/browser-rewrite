@@ -4,6 +4,10 @@ A faceted search and navigation web application for browsing cultural heritage i
 
 Claude Code rewrite based upon original https://github.com/petersm3/browser
 
+## Live Demo
+* https://petersm3.github.io/browser-rewrite
+  * LAMP version rewritten into a standalone static site version using sql.js (SQLite in WebAssembly)
+
 ## Documentation
 Original [Lightning Talk](assets/browser-lightning-talk-20151118.pdf) (20151118)
 
