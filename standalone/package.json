@@ -1,0 +1,12 @@
+{
+  "name": "browser-rewrite-build",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Build tool for generating the SQLite database (not needed at runtime)",
+  "scripts": {
+    "build": "node build_database.js"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^11.0.0"
+  }
+}
