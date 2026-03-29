@@ -6,7 +6,7 @@ Claude Code rewrite based upon original https://github.com/petersm3/browser
 
 ## Live Demo
 * https://petersm3.github.io/browser-rewrite
-  * Pure client-side rewrite of the PHP/MySQL application. The browser loads a pre-built SQLite database via WebAssembly and runs all queries locally. [`ff61fae`](https://github.com/petersm3/browser-rewrite/commit/ff61fae0d6935a05b5bc64ff7c9333210b04e344)
+  * Pure client-side rewrite of the PHP/MySQL application. The browser loads a pre-built SQLite database via WebAssembly and runs all queries locally. ([`ff61fae`](https://github.com/petersm3/browser-rewrite/commit/ff61fae0d6935a05b5bc64ff7c9333210b04e344))
 
 ## Documentation
 Original [Lightning Talk](assets/browser-lightning-talk-20151118.pdf) (20151118)
