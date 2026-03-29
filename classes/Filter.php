@@ -6,7 +6,7 @@ class Filter {
         $getFilters='';
         if(isset($post['filters'])) {
             foreach ($post['filters'] as $key => $value) {
-                $getFilters.='filter[]=' . urlencode($value) . '&';
+                $getFilters.='filter[]=' . $value . '&';
             }
         }
         if(isset($post['offset'])) {
