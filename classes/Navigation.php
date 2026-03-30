@@ -31,7 +31,7 @@ $menus.= <<<'EOD'
 EOD;
 
 // If on the Display page provide a back button
-if ($about === 2) {
+if ($about >= 1) {
     $backUrl = '/';
     if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) !== false) {
         $backUrl = htmlspecialchars($_SERVER['HTTP_REFERER'], ENT_QUOTES, 'UTF-8');

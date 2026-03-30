@@ -256,7 +256,7 @@
         html += '<a class="navbar-brand" href="#/">Browser <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>';
 
         // Back button on display page
-        if (aboutMode === 2) {
+        if (aboutMode >= 1) {
             html += '<a class="navbar-brand" href="#/" onclick="window.history.back();return false;">';
             html += 'Back <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>';
         }
