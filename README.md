@@ -12,7 +12,7 @@ Claude Code rewrite based upon original https://github.com/petersm3/browser
 Original [Lightning Talk](assets/browser-lightning-talk-20151118.pdf) (20151118)
 
 ## Screenshot
-![Example of browser faceted navigation interface](assets/browser-rewrite-c5-example)
+![Example of browser faceted navigation interface](assets/browser-rewrite-c5-example.png)
 
 ## Features
 - **Faceted navigation** with dropdown category filters and checkbox selection
