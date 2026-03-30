@@ -10,6 +10,11 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .dropdown-label { font-weight: normal !important; }
+      .dropdown-menu fieldset { border: 0; padding: 0; margin: 0; }
+      a:focus, button:focus, input:focus, label:focus { outline: 2px solid #337ab7; outline-offset: 2px; }
+    </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
