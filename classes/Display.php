@@ -50,7 +50,8 @@ class Display {
                     $results.='<div class="jumbotron">';
                     $results.='<div class="row">';
                     $results.='<div class="col-sm-5">';
-                    $results.='<a href="/display?id=' . $filterMatch['fk_properties_id'] . '">';
+                    $results.='<a href="/display?id=' . $filterMatch['fk_properties_id'] . '"';
+                    $results.=' aria-label="View accession ' . intval($filterMatch['fk_properties_id']) . '">';
                     $results.='<img class="img-responsive" src="https://' . CDN_URL;
                     $results.='/320x240/000/fff.png&amp;text=%20';
                     $results.=htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8');
@@ -59,12 +60,13 @@ class Display {
                     $results.='<div class="col-sm-2"></div>';
                     $results.='<div class="col-sm-5">';
                     $results.='<table class="table">';
-                    $results.='<tr><td>Accession:</td><td>';
-                    $results.='<a href="/display?id=' . intval($filterMatch['fk_properties_id']) . '">';
+                    $results.='<tr><th scope="row">Accession:</th><td>';
+                    $results.='<a href="/display?id=' . intval($filterMatch['fk_properties_id']) . '"';
+                    $results.=' aria-label="View accession ' . intval($filterMatch['fk_properties_id']) . '">';
                     $results.=intval($filterMatch['fk_properties_id']) . '</a></td></tr>';
-                    $results.='<tr><td>Address:</td><td>' . htmlspecialchars($properties['street_address'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
-                    $results.='<tr><td>Photographer:</td><td>' . htmlspecialchars($properties['photographer'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
-                    $results.='<tr><td>Date:</td><td>' . htmlspecialchars($properties['date'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+                    $results.='<tr><th scope="row">Address:</th><td>' . htmlspecialchars($properties['street_address'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+                    $results.='<tr><th scope="row">Photographer:</th><td>' . htmlspecialchars($properties['photographer'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+                    $results.='<tr><th scope="row">Date:</th><td>' . htmlspecialchars($properties['date'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
                     $results.='</table>';
                     $results.='</div></div>';
                     $results.='</div>';
@@ -78,7 +80,8 @@ class Display {
             $startResult = $offset + 1;
             $endResult = min($offset + $limit, $filterMatchCount);
             $results.='<div class="text-center">';
-            $results.='<p>Showing ' . $startResult . '-' . $endResult . ' of ' . $filterMatchCount . ' results</p>';
+            $results.='<p aria-live="polite">Showing ' . $startResult . '-' . $endResult . ' of ' . $filterMatchCount . ' results</p>';
+            $results.='<nav aria-label="Pagination">';
             $results.='<ul class="pagination">';
             // Construct URL of current page
             $urlFilter='';
@@ -94,19 +97,25 @@ class Display {
                     $currentOffset = 0;
                 }
                 if($currentOffset == $offset) {
-                    $results.='<li class="active">';     
+                    $results.='<li class="active">';
                 } else {
                     $results.='<li>';
                 }
                 $results.='<a href="/?' . $urlFilter;
-                $results.='offset=' . $currentOffset; 
-                $results.='">' . $page;
+                $results.='offset=' . $currentOffset . '"';
+                if($currentOffset == $offset) {
+                    $results.=' aria-current="page"';
+                } else {
+                    $results.=' aria-label="Go to page ' . $page . '"';
+                }
+                $results.='>' . $page;
                 if($currentOffset == $offset) {
                     $results.=' <span class="sr-only">(current)</span>';
-                } 
+                }
                 $results.='</a></li>';
             }
             $results.='</ul>';
+            $results.='</nav>';
             $results.='</div>';
 
             $results.='</div>'; // close container
@@ -129,13 +138,13 @@ class Display {
         $results.=htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8');
         $results.='" alt="' . htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8') . '"/>';
         $results.='<table class="table">';
-        $results.='<tr><td>Accession:</td><td>';
+        $results.='<tr><th scope="row">Accession:</th><td>';
         $results.=intval($properties['id']). '</td></tr>';
-        $results.='<tr><td>Address:</td><td>' . htmlspecialchars($properties['street_address'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
-        $results.='<tr><td>Photographer:</td><td>' . htmlspecialchars($properties['photographer'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
-        $results.='<tr><td>Date:</td><td>' . htmlspecialchars($properties['date'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+        $results.='<tr><th scope="row">Address:</th><td>' . htmlspecialchars($properties['street_address'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+        $results.='<tr><th scope="row">Photographer:</th><td>' . htmlspecialchars($properties['photographer'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+        $results.='<tr><th scope="row">Date:</th><td>' . htmlspecialchars($properties['date'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
         foreach ($attributes as $attribute) {
-            $results.='<tr><td>' . htmlspecialchars($attribute['name'], ENT_QUOTES, 'UTF-8') . '</td><td>' . htmlspecialchars($attribute['value'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+            $results.='<tr><th scope="row">' . htmlspecialchars($attribute['name'], ENT_QUOTES, 'UTF-8') . '</th><td>' . htmlspecialchars($attribute['value'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
         }
         $results.='</table>';
         $results.='</div>';

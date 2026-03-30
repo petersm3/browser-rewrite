@@ -67,3 +67,21 @@ a:visited
 	border: 5px solid #D5D4B9;
 	background: #fff;
 }
+.dropdown-label
+{
+	font-weight: normal !important;
+}
+.dropdown-menu fieldset
+{
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+a:focus,
+button:focus,
+input:focus,
+label:focus
+{
+	outline: 2px solid #337ab7;
+	outline-offset: 2px;
+}

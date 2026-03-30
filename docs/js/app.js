@@ -189,6 +189,18 @@
     }
 
     // -----------------------------------------------------------------------
+    // Focus management for SPA route changes
+    // -----------------------------------------------------------------------
+    function focusContent() {
+        var el = document.getElementById('content');
+        if (el) {
+            el.setAttribute('tabindex', '-1');
+            el.focus();
+            el.removeAttribute('tabindex');
+        }
+    }
+
+    // -----------------------------------------------------------------------
     // Routing
     // -----------------------------------------------------------------------
     function route() {
@@ -251,6 +263,7 @@
                 html += ' role="button" aria-haspopup="true" aria-expanded="false">';
                 html += esc(categoryRaw);
                 html += '<span class="caret"></span></a><ul class="dropdown-menu">';
+                html += '<fieldset><legend class="sr-only">' + esc(categoryRaw) + ' filters</legend>';
 
                 var subs = getSubCategories(categoryRaw);
                 for (var s = 0; s < subs.length; s++) {
@@ -273,7 +286,7 @@
                     if (checked) html += ' checked';
                     html += ' class="filter-cb" data-filter="' + esc(filterValue) + '"';
                     html += ' id="' + esc(checkId) + '">';
-                    html += ' <label style="font-weight:normal !important;" for="' + esc(checkId) + '">';
+                    html += ' <label class="dropdown-label" for="' + esc(checkId) + '">';
                     html += esc(subRaw);
 
                     // Badge count
@@ -288,7 +301,7 @@
                     }
                     html += '</span></label></li>';
                 }
-                html += '</ul></li>';
+                html += '</fieldset></ul></li>';
             }
 
             // Per page dropdown
@@ -299,6 +312,7 @@
             html += 'Per page: ' + currentLimit;
             html += '<span class="caret"></span></a>';
             html += '<ul class="dropdown-menu">';
+            html += '<fieldset><legend class="sr-only">Results per page</legend>';
             for (var li = 0; li < limitOptions.length; li++) {
                 var opt = limitOptions[li];
                 html += '<li>&nbsp;<input type="radio" name="limit" id="limit_' + opt;
@@ -307,7 +321,7 @@
                 html += '> <label style="font-weight:normal !important;" for="limit_' + opt + '">';
                 html += opt + '</label></li>';
             }
-            html += '</ul></li>';
+            html += '</fieldset></ul></li>';
 
             // Submit button for WCAG
             html += '<li><button type="button" class="btn btn-link submit-filters-btn">Submit</button></li>';
@@ -346,23 +360,27 @@
             }
 
             if (error) {
-                html += '<div class="alert alert-danger" role="alert">';
+                html += '<div class="alert alert-danger" role="alert" aria-live="assertive">';
                 html += '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>';
                 html += '<span class="sr-only">Error:</span>';
                 html += ' Filter: "' + esc(errorFilter) + '" is not valid; please check your URL.';
                 html += '</div>';
             } else {
+                html += '<nav aria-label="Active filters">';
                 html += '<ol class="breadcrumb">';
                 for (var j = 0; j < filters.length; j++) {
                     html += '<li>' + esc(filters[j].replace(/_/g, ' ')) + '</li> ';
                 }
                 html += '<li><a href="#/">Clear all filters</a></li>';
                 html += '</ol>';
+                html += '</nav>';
             }
         } else {
+            html += '<nav aria-label="Active filters">';
             html += '<ol class="breadcrumb">';
             html += '<li>Filters: <i>none</i></li>';
             html += '</ol>';
+            html += '</nav>';
             html += '<div class="jumbotron">';
             html += 'Select filters from the dropdown categories above to begin your search.';
             html += '</div>';
@@ -405,7 +423,7 @@
                 var props = getProperties(matches[m].fk_properties_id);
                 html += '<div class="jumbotron"><div class="row">';
                 html += '<div class="col-sm-5">';
-                html += '<a href="#/display?id=' + props.id + '">';
+                html += '<a href="#/display?id=' + props.id + '" aria-label="View accession ' + props.id + '">';
                 html += '<img class="img-responsive" src="https://' + CDN_URL;
                 html += '/320x240/000/fff.png&text=%20' + esc(props.image);
                 html += '" alt="' + esc(props.image) + '"/></a>';
@@ -413,11 +431,11 @@
                 html += '<div class="col-sm-2"></div>';
                 html += '<div class="col-sm-5">';
                 html += '<table class="table">';
-                html += '<tr><td>Accession:</td><td>';
-                html += '<a href="#/display?id=' + props.id + '">' + props.id + '</a></td></tr>';
-                html += '<tr><td>Address:</td><td>' + esc(props.street_address) + '</td></tr>';
-                html += '<tr><td>Photographer:</td><td>' + esc(props.photographer) + '</td></tr>';
-                html += '<tr><td>Date:</td><td>' + esc(props.date) + '</td></tr>';
+                html += '<tr><th scope="row">Accession:</th><td>';
+                html += '<a href="#/display?id=' + props.id + '" aria-label="View accession ' + props.id + '">' + props.id + '</a></td></tr>';
+                html += '<tr><th scope="row">Address:</th><td>' + esc(props.street_address) + '</td></tr>';
+                html += '<tr><th scope="row">Photographer:</th><td>' + esc(props.photographer) + '</td></tr>';
+                html += '<tr><th scope="row">Date:</th><td>' + esc(props.date) + '</td></tr>';
                 html += '</table></div></div></div>';
             }
         }
@@ -429,7 +447,8 @@
         var endResult = Math.min(offset + limit, filterMatchCount);
 
         html += '<div class="text-center">';
-        html += '<p>Showing ' + startResult + '-' + endResult + ' of ' + filterMatchCount + ' results</p>';
+        html += '<p aria-live="polite">Showing ' + startResult + '-' + endResult + ' of ' + filterMatchCount + ' results</p>';
+        html += '<nav aria-label="Pagination">';
         html += '<ul class="pagination">';
 
         for (var page = 1; page <= totalPages; page++) {
@@ -437,12 +456,18 @@
             if (page === 1) currentOffset = 0;
             var active = (currentOffset === offset);
             html += '<li' + (active ? ' class="active"' : '') + '>';
-            html += '<a href="' + buildHash(filters, limit, currentOffset) + '">' + page;
+            html += '<a href="' + buildHash(filters, limit, currentOffset) + '"';
+            if (active) {
+                html += ' aria-current="page"';
+            } else {
+                html += ' aria-label="Go to page ' + page + '"';
+            }
+            html += '>' + page;
             if (active) html += ' <span class="sr-only">(current)</span>';
             html += '</a></li>';
         }
 
-        html += '</ul></div></div>';
+        html += '</ul></nav></div></div>';
         return html;
     }
 
@@ -454,11 +479,15 @@
         document.title = 'Image and cultural properties browser';
 
         var html = buildNavbar(0, state);
+        html += '<main id="content">';
+        html += '<h1 class="sr-only">Image and cultural properties browser</h1>';
         html += buildBreadcrumbs(state);
         html += buildResults(state);
+        html += '</main>';
 
         document.getElementById('app').innerHTML = html;
         bindEvents(state);
+        focusContent();
     }
 
     // -----------------------------------------------------------------------
@@ -477,28 +506,32 @@
 
         var props = getProperties(id);
         if (props.id !== id) {
-            html += '<div class="container">Accession ' + parseInt(id) + ' not found.</div>';
+            html += '<div class="container"><main id="content"><h1 class="sr-only">Accession Detail</h1>Accession ' + parseInt(id) + ' not found.</main></div>';
             document.getElementById('app').innerHTML = html;
+            focusContent();
             return;
         }
 
         var attrs = getAttributes(id);
 
-        html += '<div class="container"><div class="jumbotron">';
+        html += '<div class="container"><main id="content">';
+        html += '<h1 class="sr-only">Accession Detail</h1>';
+        html += '<div class="jumbotron">';
         html += '<img class="img-responsive" src="https://' + CDN_URL + '/640x480/000/fff.png&text=%20';
         html += esc(props.image) + '" alt="' + esc(props.image) + '"/>';
         html += '<table class="table">';
-        html += '<tr><td>Accession:</td><td>' + props.id + '</td></tr>';
-        html += '<tr><td>Address:</td><td>' + esc(props.street_address) + '</td></tr>';
-        html += '<tr><td>Photographer:</td><td>' + esc(props.photographer) + '</td></tr>';
-        html += '<tr><td>Date:</td><td>' + esc(props.date) + '</td></tr>';
+        html += '<tr><th scope="row">Accession:</th><td>' + props.id + '</td></tr>';
+        html += '<tr><th scope="row">Address:</th><td>' + esc(props.street_address) + '</td></tr>';
+        html += '<tr><th scope="row">Photographer:</th><td>' + esc(props.photographer) + '</td></tr>';
+        html += '<tr><th scope="row">Date:</th><td>' + esc(props.date) + '</td></tr>';
 
         for (var a = 0; a < attrs.length; a++) {
-            html += '<tr><td>' + esc(attrs[a].name) + '</td><td>' + esc(attrs[a].value) + '</td></tr>';
+            html += '<tr><th scope="row">' + esc(attrs[a].name) + '</th><td>' + esc(attrs[a].value) + '</td></tr>';
         }
 
-        html += '</table></div></div>';
+        html += '</table></div></main></div>';
         document.getElementById('app').innerHTML = html;
+        focusContent();
     }
 
     // -----------------------------------------------------------------------
@@ -507,29 +540,32 @@
     function renderAbout() {
         document.title = 'About';
 
+        var extIcon = ' <span class="sr-only">(opens in new window)</span>';
         var html = buildNavbar(1, {});
         html += '<div class="container">';
-        html += '<section id="content">';
+        html += '<main id="content">';
+        html += '<h1>About</h1>';
         html += '<ul>';
         html += '  <li>Author: Matthew Peterson <a href="mailto:petersm3@oregonstate.edu">petersm3@oregonstate.edu</a></li>';
         html += '  <li>Project: Image and cultural properties browser';
         html += '      <ul>';
-        html += '          <li>Emulating the functionality of <a target="_blank" href="https://oregondigital.org/collections/building-or">Building Oregon</a> (circa 2015)</li>';
+        html += '          <li>Emulating the functionality of <a target="_blank" rel="noopener" href="https://oregondigital.org/collections/building-or">Building Oregon' + extIcon + '</a> (circa 2015)</li>';
         html += '      </ul>';
         html += '  </li>';
-        html += '  <li>GitHub: <a target="_blank" href="https://github.com/petersm3/browser-rewrite">https://github.com/petersm3/browser-rewrite</a></li>';
+        html += '  <li>GitHub: <a target="_blank" rel="noopener" href="https://github.com/petersm3/browser-rewrite">https://github.com/petersm3/browser-rewrite' + extIcon + '</a></li>';
         html += '  <li>Technologies used:';
         html += '      <ul>';
-        html += '         <li><a target="_blank" href="https://sql.js.org/">sql.js</a> (SQLite in WebAssembly)</li>';
-        html += '         <li><a target="_blank" href="https://getbootstrap.com/">Bootstrap</a></li>';
-        html += '         <li><a target="_blank" href="http://dummyimage.com/">Dynamic Dummy Image Generator</a></li>';
-        html += '         <li><a target="_blank" href="https://claude.ai">Claude Code</a></li>';
+        html += '         <li><a target="_blank" rel="noopener" href="https://sql.js.org/">sql.js' + extIcon + '</a> (SQLite in WebAssembly)</li>';
+        html += '         <li><a target="_blank" rel="noopener" href="https://getbootstrap.com/">Bootstrap' + extIcon + '</a></li>';
+        html += '         <li><a target="_blank" rel="noopener" href="http://dummyimage.com/">Dynamic Dummy Image Generator' + extIcon + '</a></li>';
+        html += '         <li><a target="_blank" rel="noopener" href="https://claude.ai">Claude Code' + extIcon + '</a></li>';
         html += '      </ul>';
         html += '   </li>';
         html += '</ul>';
-        html += '</section></div>';
+        html += '</main></div>';
 
         document.getElementById('app').innerHTML = html;
+        focusContent();
     }
 
     // -----------------------------------------------------------------------

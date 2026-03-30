@@ -56,6 +56,7 @@ $menus.='<ul class="nav navbar-nav">';
                 $menus.=' role="button" aria-haspopup="true" aria-expanded="false">';
                 $menus.=$category['category'];
                 $menus.='<span class="caret"></span></a><ul class="dropdown-menu">';
+                $menus.='<fieldset><legend class="sr-only">' . htmlspecialchars($categoryRaw, ENT_QUOTES, 'UTF-8') . ' filters</legend>';
                 // Get each individual subcategories per the current category
                 $subCategories = $this->navigationDatabase->getSubCategories($categoryRaw);
                 foreach ($subCategories as $subCategory) {
@@ -83,7 +84,7 @@ $menus.='<ul class="nav navbar-nav">';
                     $menus.='" onchange="this.form.submit();"> ';
                     // Enable text to be clickable along with checkbox
                     // Override bootstrap's default bold style of labels
-                    $menus.='<label style="font-weight:normal !important;" for="';
+                    $menus.='<label class="dropdown-label" for="';
                     $menus.=$categoryUnderscore . $colon . $subCategoryEncode . '">';
                     $menus.=$subCategoryRaw;
 
@@ -111,7 +112,7 @@ $menus.='<ul class="nav navbar-nav">';
                     }
                     $menus.='</span></label></li>';
                 }
-                $menus.='</ul></li>';
+                $menus.='</fieldset></ul></li>';
             }
             // Results per page dropdown
             $currentLimit = 10;
@@ -125,6 +126,7 @@ $menus.='<ul class="nav navbar-nav">';
             $menus.='Per page: ' . $currentLimit;
             $menus.='<span class="caret"></span></a>';
             $menus.='<ul class="dropdown-menu">';
+            $menus.='<fieldset><legend class="sr-only">Results per page</legend>';
             foreach($limitOptions as $opt) {
                 $menus.='<li>&nbsp;<input type="radio" name="limit" id="limit_' . $opt;
                 $menus.='" value="' . $opt . '"';
@@ -132,10 +134,10 @@ $menus.='<ul class="nav navbar-nav">';
                     $menus.=' checked';
                 }
                 $menus.=' onchange="this.form.submit();"> ';
-                $menus.='<label style="font-weight:normal !important;" for="limit_' . $opt . '">';
+                $menus.='<label class="dropdown-label" for="limit_' . $opt . '">';
                 $menus.=$opt . '</label></li>';
             }
-            $menus.='</ul></li>';
+            $menus.='</fieldset></ul></li>';
 
             $menus.='<li>';
             // Submit button for WCAG as screen reader may not implement JS onchange
@@ -167,7 +169,7 @@ EOD;
                     $categoryId = $this->displayDatabase->getCategoriesId($category, $subcategory);
                     if(($error === 0) && ($categoryId['id'] < 1)) {
                         $error=1;
-                        $menus.='<div class="alert alert-danger" role="alert">';
+                        $menus.='<div class="alert alert-danger" role="alert" aria-live="assertive">';
                         $menus.='<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>';
                         $menus.='<span class="sr-only">Error:</span>';
                         $menus.=' Filter: "' . htmlspecialchars($getFilter, ENT_QUOTES, 'UTF-8') . '" is not valid; please check your URL.';
@@ -177,6 +179,7 @@ EOD;
             }
 
             if($error === 0) {
+                $menus.='<nav aria-label="Active filters">';
                 $menus.='<ol class="breadcrumb">';
                 if(isset($get['filter'])) {
                     foreach ($get['filter'] as $filter) {
@@ -187,6 +190,7 @@ EOD;
                     $menus.= '<li>Filters: <i>none</i></li>';
                 }
                 $menus.='</ol>';
+                $menus.='</nav>';
 
                 // If no filters show a default message
                 if(!isset($get['filter'])) {
