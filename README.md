@@ -28,7 +28,7 @@ Claude Code rewrite based upon original https://github.com/petersm3/browser
 # Technical Details
 
 ## Architecture
-PHP 5+/8.x application using the [LightVC](modules/lightvc/) MVC framework, Bootstrap 3.x, and jQuery 1.11.3.
+PHP 8.x application using the [LightVC](modules/lightvc/) MVC framework, Bootstrap 3.x, and jQuery 1.11.3.
 
 ```
 browser-rewrite/
