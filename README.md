@@ -136,19 +136,19 @@ Configure a VirtualHost with `DocumentRoot` and `Directory` pointing to `webroot
 </VirtualHost>
 ```
 
-#### CDN (optional)
+#### Placeholder images
 
-The application references a CDN for placeholder images. To simulate this locally, deploy [Dynamic Dummy Image Generator](http://dummyimage.com/) to a separate VirtualHost:
+Placeholder images are generated locally by [webroot/img/generate.php](webroot/img/generate.php) using PHP GD — no external CDN or third-party service required. Requests to `/img/WIDTHxHEIGHT/BGCOLOR/FGCOLOR.FORMAT?text=TEXT` are routed by `.htaccess` to the generator, which renders the image on the fly and returns it with 90-day cache headers.
 
-- `code.php` is required (referenced by its `.htaccess`); `index.php` is not
 - Requires PHP GD: `apt-get install php-gd`
-- Line 110 of `code.php` may need an explicit font path, e.g.: `$font = "/var/www/cdn/mplus-1c-medium.ttf";`
+- The bundled [M+ font](webroot/img/mplus-1c-medium.ttf) (SIL Open Font License) is used for text rendering
+
+The static/client-side version uses an equivalent Canvas-based generator with no server dependency.
 
 ### 4. Application configuration
 
 1. Copy [config.php-template](config/config.php-template) to `config/config.php`
 2. Set the MySQL credentials (`browser_www` with SELECT-only privileges)
-3. Set `CDN_URL` to the CDN VirtualHost FQDN
 
 ### 5. Rate limiting (recommended)
 
