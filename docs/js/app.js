@@ -9,8 +9,34 @@
 (function () {
     'use strict';
 
-    var CDN_URL = 'dummyimage.com';
     var db = null; // sql.js Database instance
+
+    // -----------------------------------------------------------------------
+    // Placeholder image generator (replaces external dummyimage.com)
+    // -----------------------------------------------------------------------
+    function generatePlaceholder(width, height, bgHex, fgHex, text) {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext('2d');
+
+        // Fill background
+        ctx.fillStyle = '#' + bgHex;
+        ctx.fillRect(0, 0, width, height);
+
+        // Render text
+        if (text) {
+            var fontSize = Math.max(Math.min(width / Math.max(text.length, 1) * 1.15, height * 0.5), 5);
+            fontSize = Math.min(fontSize, 60);
+            ctx.fillStyle = '#' + fgHex;
+            ctx.font = fontSize + 'px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, width / 2, height / 2);
+        }
+
+        return canvas.toDataURL('image/png');
+    }
 
     // -----------------------------------------------------------------------
     // Initialisation: load the SQLite database into memory
@@ -424,8 +450,7 @@
                 html += '<div class="jumbotron"><div class="row">';
                 html += '<div class="col-sm-5">';
                 html += '<a href="#/display?id=' + props.id + '" aria-label="View accession ' + props.id + '">';
-                html += '<img class="img-responsive" src="https://' + CDN_URL;
-                html += '/320x240/000/fff.png&text=%20' + esc(props.image);
+                html += '<img class="img-responsive" src="' + generatePlaceholder(320, 240, '000', 'fff', props.image);
                 html += '" alt="' + esc(props.image) + '"/></a>';
                 html += '</div>';
                 html += '<div class="col-sm-2"></div>';
@@ -517,8 +542,8 @@
         html += '<div class="container"><main id="content">';
         html += '<h1 class="sr-only">Accession Detail</h1>';
         html += '<div class="jumbotron">';
-        html += '<img class="img-responsive" src="https://' + CDN_URL + '/640x480/000/fff.png&text=%20';
-        html += esc(props.image) + '" alt="' + esc(props.image) + '"/>';
+        html += '<img class="img-responsive" src="' + generatePlaceholder(640, 480, '000', 'fff', props.image);
+        html += '" alt="' + esc(props.image) + '"/>';
         html += '<table class="table">';
         html += '<tr><th scope="row">Accession:</th><td>' + props.id + '</td></tr>';
         html += '<tr><th scope="row">Address:</th><td>' + esc(props.street_address) + '</td></tr>';
