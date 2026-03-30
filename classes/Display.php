@@ -52,8 +52,7 @@ class Display {
                     $results.='<div class="col-sm-5">';
                     $results.='<a href="/display?id=' . $filterMatch['fk_properties_id'] . '"';
                     $results.=' aria-label="View accession ' . intval($filterMatch['fk_properties_id']) . '">';
-                    $results.='<img class="img-responsive" src="/img
-                    $results.='/320x240/000/fff.png?text=%20';
+                    $results.='<img class="img-responsive" src="/img/320x240/000/fff.png?text=%20';
                     $results.=htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8');
                     $results.='" alt="' . htmlspecialchars($properties['image'], ENT_QUOTES, 'UTF-8') . '"/></a>';
                     $results.='</div>';
