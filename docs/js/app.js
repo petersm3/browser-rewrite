@@ -582,7 +582,6 @@
         html += '      <ul>';
         html += '         <li><a target="_blank" rel="noopener" href="https://sql.js.org/">sql.js' + extIcon + '</a> (SQLite in WebAssembly)</li>';
         html += '         <li><a target="_blank" rel="noopener" href="https://getbootstrap.com/">Bootstrap' + extIcon + '</a></li>';
-        html += '         <li><a target="_blank" rel="noopener" href="http://dummyimage.com/">Dynamic Dummy Image Generator' + extIcon + '</a></li>';
         html += '         <li><a target="_blank" rel="noopener" href="https://claude.ai">Claude Code' + extIcon + '</a></li>';
         html += '      </ul>';
         html += '   </li>';
