@@ -344,7 +344,7 @@
                 html += '<li>&nbsp;<input type="radio" name="limit" id="limit_' + opt;
                 html += '" value="' + opt + '" class="limit-radio"';
                 if (opt === currentLimit) html += ' checked';
-                html += '> <label style="font-weight:normal !important;" for="limit_' + opt + '">';
+                html += '> <label class="dropdown-label" for="limit_' + opt + '">';
                 html += opt + '</label></li>';
             }
             html += '</fieldset></ul></li>';
