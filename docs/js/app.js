@@ -512,7 +512,7 @@
 
         document.getElementById('app').innerHTML = html;
         bindEvents(state);
-        focusContent();
+        window.scrollTo(0, 0);
     }
 
     // -----------------------------------------------------------------------
