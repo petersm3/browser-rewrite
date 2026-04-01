@@ -9,7 +9,7 @@ Claude Code rewrite based upon original https://github.com/petersm3/browser
   * Pure client-side rewrite of the PHP/MySQL application. The browser loads a pre-built SQLite database via WebAssembly and runs all queries locally. ([`ff61fae`](https://github.com/petersm3/browser-rewrite/commit/ff61fae0d6935a05b5bc64ff7c9333210b04e344))
 
 ## Presentations
-* Original [Lightning Talk](assets/browser-lightning-talk-20151118.pdf) (20151118)
+* "[An Exploration of Claude Code; Retooling a legacy web application with Anthropic’s agentic coding tool](assets/Claude-Code-All-Technical-Architecture-Meeting-20260401.pdf)" (20260401)
 
 ## Screenshot
 ![Example of browser faceted navigation interface](assets/browser-rewrite-c5-example.png)
