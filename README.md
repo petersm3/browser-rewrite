@@ -1,4 +1,7 @@
-# Summary
+# Browser Rewrite
+Image and cultural properties browser rewrite using Claude Code
+
+## Summary
 
 A faceted search and navigation web application for browsing cultural heritage image collections. Users select category filters from dropdown menus to narrow results across ~20,000 accession records, view paginated results, and drill into individual accession detail pages.
 
